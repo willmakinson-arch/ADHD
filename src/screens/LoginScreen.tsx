@@ -14,6 +14,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
 } from 'firebase/auth';
 import Logo from '../components/Logo';
 import { auth } from '../firebase';
@@ -67,7 +68,14 @@ export default function LoginScreen({ onContinueAsGuest }: Props) {
     setBusy(true);
     setError(null);
     try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
+      const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
+      const isMobileWeb = typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches;
+      if (isMobileWeb) {
+        await signInWithRedirect(auth, provider);
+      } else {
+        await signInWithPopup(auth, provider);
+      }
     } catch (e) {
       setError(friendlyError(e));
     } finally {
@@ -84,7 +92,7 @@ export default function LoginScreen({ onContinueAsGuest }: Props) {
       <View style={styles.card}>
         <TouchableOpacity style={styles.googleButton} onPress={googleSignIn} disabled={busy}>
           <Text style={styles.googleMark}>G</Text>
-          <Text style={styles.googleText}>Continue with Google</Text>
+          <Text style={styles.googleText}>Sign in with Gmail</Text>
         </TouchableOpacity>
 
         <View style={styles.dividerRow}>

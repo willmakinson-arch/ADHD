@@ -1,4 +1,14 @@
 {
+  "auth": {
+    "providers": {
+      "anonymous": true,
+      "emailPassword": true,
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "Different Minds",
+        "supportEmail": "willmakinson@gmail.com"
+      }
+    }
+  },
   "hosting": {
     "public": "dist",
     "ignore": [
