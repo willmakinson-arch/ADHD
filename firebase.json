@@ -5,7 +5,10 @@
       "emailPassword": true,
       "googleSignIn": {
         "oAuthBrandDisplayName": "Different Minds",
-        "supportEmail": "willmakinson@gmail.com"
+        "supportEmail": "willmakinson@gmail.com",
+        "authorizedRedirectUris": [
+          "https://different-minds-adhd.web.app"
+        ]
       }
     }
   },

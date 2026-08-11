@@ -3,7 +3,9 @@ import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBF7bWZzIqv8njP5BFYyfESzBYTBhw9R6Y',
-  authDomain: 'different-minds-adhd.firebaseapp.com',
+  // Keep auth on the same Firebase Hosting origin so Safari/iOS does not
+  // block redirect state as third-party storage.
+  authDomain: 'different-minds-adhd.web.app',
   projectId: 'different-minds-adhd',
   storageBucket: 'different-minds-adhd.firebasestorage.app',
   messagingSenderId: '1034614874436',

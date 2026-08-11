@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -12,6 +12,7 @@ import {
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  getRedirectResult,
   signInWithEmailAndPassword,
   signInWithPopup,
   signInWithRedirect,
@@ -39,6 +40,13 @@ export default function LoginScreen({ onContinueAsGuest }: Props) {
   const [createAccount, setCreateAccount] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    getRedirectResult(auth).catch((redirectError) => {
+      setError(friendlyError(redirectError));
+    });
+  }, []);
 
   const emailSignIn = async () => {
     if (!email.trim() || !password) {
