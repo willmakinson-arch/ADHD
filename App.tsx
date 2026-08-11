@@ -11,11 +11,10 @@ import SplashScreen from './src/screens/SplashScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import ClinicsScreen from './src/screens/ClinicsScreen';
 import RTCWizardScreen from './src/screens/RTCWizardScreen';
-import AppointmentsScreen from './src/screens/AppointmentsScreen';
 import PrivateClinicsScreen from './src/screens/PrivateClinicsScreen';
 import LoginScreen from './src/screens/LoginScreen';
-import SettingsScreen from './src/screens/SettingsScreen';
 import DeviceUnlockScreen from './src/screens/DeviceUnlockScreen';
+import MoreScreen from './src/screens/MoreScreen';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from './src/firebase';
 import { deviceLockEnabled } from './src/utils/deviceLock';
@@ -108,9 +107,8 @@ function AppContent() {
           <Tab.Screen name="RTC" component={ClinicsScreen} options={{ title: 'RTC Clinics', tabBarLabel: 'RTC', tabBarIcon: ({ color }) => <TabIcon symbol="R" color={color} /> }} />
           <Tab.Screen name="Private" component={PrivateClinicsScreen} options={{ title: 'Private Clinics', tabBarLabel: 'Private', tabBarIcon: ({ color }) => <TabIcon symbol="P" color={color} /> }} />
           <Tab.Screen name="Letter" component={RTCWizardScreen} options={{ title: 'RTC Letter', tabBarLabel: 'Letter', tabBarIcon: ({ color }) => <TabIcon symbol="✎" color={color} /> }} />
-          <Tab.Screen name="Diary" component={AppointmentsScreen} options={{ title: 'Appointments', tabBarLabel: 'Diary', tabBarIcon: ({ color }) => <TabIcon symbol="●" color={color} /> }} />
-          <Tab.Screen name="Settings" options={{ tabBarIcon: ({ color }) => <TabIcon symbol="⚙" color={color} /> }}>
-            {() => <SettingsScreen user={user} guest={guest} onLogout={logout} />}
+          <Tab.Screen name="More" options={{ tabBarIcon: ({ color }) => <TabIcon symbol="•••" color={color} /> }}>
+            {props => <MoreScreen {...props} user={user} guest={guest} onLogout={logout} />}
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>

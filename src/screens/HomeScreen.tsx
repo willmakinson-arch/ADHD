@@ -24,7 +24,7 @@ export default function HomeScreen({ navigation }: any) {
         <Text style={styles.cardTitle}>Build your GP letter</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Diary')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('More', { open: 'appointments', request: Date.now() })}>
         <Text style={styles.cardTitle}>Your appointments</Text>
       </TouchableOpacity>
 
