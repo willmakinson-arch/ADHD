@@ -19,6 +19,7 @@ import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from './src/firebase';
 import { deviceLockEnabled } from './src/utils/deviceLock';
 import { colors } from './src/theme/theme';
+import { LocationProvider, useLocation } from './src/context/LocationContext';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,17 +35,22 @@ const navTheme = {
   },
 };
 
-export default function App() {
+function AppContent() {
   const [showSplash, setShowSplash] = useState(true);
   const [authReady, setAuthReady] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [guest, setGuest] = useState(false);
   const [deviceUnlocked, setDeviceUnlocked] = useState(false);
+  const { status: locationStatus, requestLocation } = useLocation();
 
   useEffect(() => onAuthStateChanged(auth, currentUser => {
     setUser(currentUser);
     setAuthReady(true);
   }), []);
+
+  useEffect(() => {
+    if ((user || guest) && locationStatus === 'idle') requestLocation();
+  }, [user, guest, locationStatus]);
 
   if (showSplash) {
     return (
@@ -98,4 +104,8 @@ export default function App() {
       </NavigationContainer>
     </SafeAreaProvider>
   );
+}
+
+export default function App() {
+  return <LocationProvider><AppContent /></LocationProvider>;
 }
