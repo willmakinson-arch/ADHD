@@ -31,7 +31,7 @@ jobs:
         run: npm install
 
       - name: Export static web build
-        run: npx expo export --platform web
+        run: npm run export:web
 
       - name: Add .nojekyll (so GitHub Pages serves the _expo folder as-is)
         run: touch dist/.nojekyll

@@ -104,7 +104,7 @@ function AppContent() {
             tabBarInactiveTintColor: colors.textMuted,
           }}
         >
-          <Tab.Screen name="ADHD/DM" component={HomeScreen} options={{ tabBarIcon: ({ color }) => <TabIcon symbol="DM" color={color} /> }} />
+          <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarIcon: ({ color }) => <TabIcon symbol="⌂" color={color} /> }} />
           <Tab.Screen name="RTC" component={ClinicsScreen} options={{ title: 'RTC Clinics', tabBarLabel: 'RTC', tabBarIcon: ({ color }) => <TabIcon symbol="R" color={color} /> }} />
           <Tab.Screen name="Private" component={PrivateClinicsScreen} options={{ title: 'Private Clinics', tabBarLabel: 'Private', tabBarIcon: ({ color }) => <TabIcon symbol="P" color={color} /> }} />
           <Tab.Screen name="Letter" component={RTCWizardScreen} options={{ title: 'RTC Letter', tabBarLabel: 'Letter', tabBarIcon: ({ color }) => <TabIcon symbol="✎" color={color} /> }} />

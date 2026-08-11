@@ -9,7 +9,6 @@ export default function HomeScreen({ navigation }: any) {
       <View style={styles.header}>
         <View style={styles.logoCard}><Logo size={82} /></View>
         <Text style={styles.appName}>Different Minds</Text>
-        <Text style={styles.shortName}>ADHD / DM</Text>
         <Text style={styles.subGreeting}>ADHD support &amp; guidance</Text>
       </View>
 
@@ -41,7 +40,6 @@ const styles = StyleSheet.create({
   header: { alignItems: 'center', marginBottom: spacing.lg, marginTop: spacing.sm },
   logoCard: { width: 104, height: 104, borderRadius: 24, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
   appName: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: spacing.md },
-  shortName: { color: colors.primary, fontSize: 13, fontWeight: '800', letterSpacing: 1, marginTop: 2 },
   subGreeting: { color: colors.textMuted, fontSize: 13, marginTop: 2 },
   card: {
     backgroundColor: colors.surface,
