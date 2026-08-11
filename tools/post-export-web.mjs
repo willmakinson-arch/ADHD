@@ -23,7 +23,8 @@ const manifest = {
 
 const indexPath = new URL('../dist/index.html', import.meta.url);
 const index = await readFile(indexPath, 'utf8');
-await writeFile(indexPath, index.replace('</head>', `${headTags}\n</head>`));
+const phoneReadyIndex = index.replace('width=device-width, initial-scale=1, shrink-to-fit=no', 'width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover');
+await writeFile(indexPath, phoneReadyIndex.replace('</head>', `${headTags}\n</head>`));
 await copyFile(new URL('../assets/apple-touch-icon.png', import.meta.url), new URL('../dist/apple-touch-icon.png', import.meta.url));
 await copyFile(new URL('../assets/icon.png', import.meta.url), new URL('../dist/app-icon.png', import.meta.url));
 await writeFile(new URL('../dist/manifest.webmanifest', import.meta.url), JSON.stringify(manifest, null, 2));

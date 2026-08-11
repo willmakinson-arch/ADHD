@@ -15,6 +15,7 @@ import PrivateClinicsScreen from './src/screens/PrivateClinicsScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import DeviceUnlockScreen from './src/screens/DeviceUnlockScreen';
 import MoreScreen from './src/screens/MoreScreen';
+import UpdateBanner from './src/components/UpdateBanner';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from './src/firebase';
 import { deviceLockEnabled } from './src/utils/deviceLock';
@@ -82,6 +83,7 @@ function AppContent() {
 
   return (
     <SafeAreaProvider>
+      <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <NavigationContainer theme={navTheme}>
         <StatusBar style="light" />
         <Tab.Navigator
@@ -91,10 +93,22 @@ function AppContent() {
             tabBarStyle: {
               backgroundColor: colors.surface,
               borderTopColor: colors.border,
-              height: 66 + insets.bottom,
+              position: 'absolute',
+              left: 10,
+              right: 10,
+              bottom: Math.max(insets.bottom, 8),
+              height: 66,
+              borderRadius: 22,
+              borderWidth: 1,
+              borderColor: colors.border,
               paddingTop: 7,
-              paddingBottom: Math.max(insets.bottom, 7),
+              paddingBottom: 7,
+              shadowColor: '#000',
+              shadowOpacity: 0.35,
+              shadowRadius: 16,
+              shadowOffset: { width: 0, height: 8 },
             },
+            sceneStyle: { paddingBottom: 82 + insets.bottom },
             tabBarItemStyle: { minWidth: 0, paddingHorizontal: 1 },
             tabBarLabelStyle: { fontSize: 11, fontWeight: '800', marginTop: 2 },
             tabBarIconStyle: { marginBottom: 0 },
@@ -112,6 +126,8 @@ function AppContent() {
           </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
+      <UpdateBanner />
+      </View>
     </SafeAreaProvider>
   );
 }
