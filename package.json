@@ -1,0 +1,37 @@
+{
+  "name": "adhd-navigator-rebuild",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@expo/metro-runtime": "~6.1.2",
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "@react-navigation/bottom-tabs": "^7.18.16",
+    "@react-navigation/native": "^7.3.16",
+    "@react-navigation/native-stack": "^7.18.8",
+    "expo": "~54.0.35",
+    "expo-notifications": "^0.32.17",
+    "expo-status-bar": "~3.0.9",
+    "react": "19.1.0",
+    "react-dom": "^19.1.0",
+    "react-native": "0.81.5",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-get-random-values": "~1.11.0",
+    "react-native-safe-area-context": "~5.6.0",
+    "react-native-screens": "~4.16.0",
+    "react-native-svg": "^15.8.0",
+    "react-native-web": "^0.20.0",
+    "uuid": "^11.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "~19.1.0",
+    "@types/uuid": "^10.0.0",
+    "typescript": "~5.9.2"
+  },
+  "private": true
+}
