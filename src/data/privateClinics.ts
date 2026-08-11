@@ -14,6 +14,18 @@ export interface PrivateClinic {
 // Starting prices are indicative and must be checked with the provider before booking.
 // Coordinates represent a clinic or service hub and are used only for approximate sorting.
 export const PRIVATE_CLINICS: PrivateClinic[] = [
+  {
+    id: 'ready-health-standish',
+    name: 'Ready Health',
+    location: 'Standish, Wigan / online UK-wide',
+    lat: 53.5864,
+    lng: -2.6641,
+    priceFrom: 'Adult online from £499',
+    appointmentType: 'Online or face-to-face',
+    ages: 'Adults and children aged 6+',
+    notes: 'CQC-registered clinic offering ADHD assessment, reports, titration and coaching. Face-to-face assessments are at 22 High Street, Standish. Medication, titration and shared-care letters cost extra.',
+    website: 'https://readyhealth.co.uk/services/mental-health-psychology/adhd-testing-diagnosis',
+  },
   { id: 'adhd360-private', name: 'ADHD 360', location: 'Lincolnshire / online UK-wide', lat: 53.2307, lng: -0.5406, priceFrom: 'From £950', appointmentType: 'Online specialist assessment', ages: 'Adults and children', notes: 'ADHD-specialist assessment and treatment packages. Check the full cost of titration, medication and reviews.', website: 'https://www.adhd-360.com/pathway-choice/' },
   { id: 'psychiatry-uk-private', name: 'Psychiatry-UK', location: 'Online UK-wide', lat: 52.4862, lng: -1.8904, priceFrom: 'From £950', appointmentType: 'Online consultant psychiatrist', ages: 'Adults', notes: 'Assessment report and treatment plan included. Medication titration is a separate cost.', website: 'https://psychiatry-uk.com/private-adult-adhd-service/' },
   { id: 'berkeley', name: 'Berkeley Psychiatrists', location: 'London / online UK-wide', lat: 51.5204, lng: -0.1477, priceFrom: 'Online from £745', appointmentType: 'Online or Harley Street', ages: 'Adults and children', notes: 'Assessments are conducted by doctors. In-person and child assessment prices are higher.', website: 'https://www.berkeleypsychiatrists.co.uk/fees' },
