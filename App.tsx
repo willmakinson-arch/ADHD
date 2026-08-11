@@ -1,10 +1,11 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import SplashScreen from './src/screens/SplashScreen';
 import HomeScreen from './src/screens/HomeScreen';
@@ -36,6 +37,7 @@ const navTheme = {
 };
 
 function AppContent() {
+  const insets = useSafeAreaInsets();
   const [showSplash, setShowSplash] = useState(true);
   const [authReady, setAuthReady] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -87,17 +89,27 @@ function AppContent() {
           screenOptions={{
             headerStyle: { backgroundColor: colors.surface },
             headerTintColor: colors.text,
-            tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
+            tabBarStyle: {
+              backgroundColor: colors.surface,
+              borderTopColor: colors.border,
+              height: 66 + insets.bottom,
+              paddingTop: 7,
+              paddingBottom: Math.max(insets.bottom, 7),
+            },
+            tabBarItemStyle: { minWidth: 0, paddingHorizontal: 1 },
+            tabBarLabelStyle: { fontSize: 11, fontWeight: '800', marginTop: 2 },
+            tabBarIconStyle: { marginBottom: 0 },
+            tabBarHideOnKeyboard: true,
             tabBarActiveTintColor: colors.primary,
             tabBarInactiveTintColor: colors.textMuted,
           }}
         >
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="RTC Clinics" component={ClinicsScreen} />
-          <Tab.Screen name="Private Clinics" component={PrivateClinicsScreen} />
-          <Tab.Screen name="RTC Wizard" component={RTCWizardScreen} />
-          <Tab.Screen name="Appointments" component={AppointmentsScreen} />
-          <Tab.Screen name="Settings">
+          <Tab.Screen name="ADHD/DM" component={HomeScreen} options={{ tabBarIcon: ({ color }) => <TabIcon symbol="DM" color={color} /> }} />
+          <Tab.Screen name="RTC" component={ClinicsScreen} options={{ title: 'RTC Clinics', tabBarLabel: 'RTC', tabBarIcon: ({ color }) => <TabIcon symbol="R" color={color} /> }} />
+          <Tab.Screen name="Private" component={PrivateClinicsScreen} options={{ title: 'Private Clinics', tabBarLabel: 'Private', tabBarIcon: ({ color }) => <TabIcon symbol="P" color={color} /> }} />
+          <Tab.Screen name="Letter" component={RTCWizardScreen} options={{ title: 'RTC Letter', tabBarLabel: 'Letter', tabBarIcon: ({ color }) => <TabIcon symbol="✎" color={color} /> }} />
+          <Tab.Screen name="Diary" component={AppointmentsScreen} options={{ title: 'Appointments', tabBarLabel: 'Diary', tabBarIcon: ({ color }) => <TabIcon symbol="●" color={color} /> }} />
+          <Tab.Screen name="Settings" options={{ tabBarIcon: ({ color }) => <TabIcon symbol="⚙" color={color} /> }}>
             {() => <SettingsScreen user={user} guest={guest} onLogout={logout} />}
           </Tab.Screen>
         </Tab.Navigator>
@@ -106,6 +118,14 @@ function AppContent() {
   );
 }
 
+function TabIcon({ symbol, color }: { symbol: string; color: string }) {
+  return (
+    <View style={{ width: 32, height: 27, borderRadius: 9, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surfaceAlt }}>
+      <Text style={{ color, fontSize: symbol === 'DM' ? 11 : 17, fontWeight: '900' }}>{symbol}</Text>
+    </View>
+  );
+}
+
 export default function App() {
-  return <LocationProvider><AppContent /></LocationProvider>;
+  return <SafeAreaProvider><LocationProvider><AppContent /></LocationProvider></SafeAreaProvider>;
 }

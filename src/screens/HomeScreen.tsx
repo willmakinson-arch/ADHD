@@ -7,24 +7,25 @@ export default function HomeScreen({ navigation }: any) {
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: spacing.xl }}>
       <View style={styles.header}>
-        <Logo size={56} />
-        <Text style={styles.greeting}>Different Minds</Text>
+        <View style={styles.logoCard}><Logo size={82} /></View>
+        <Text style={styles.appName}>Different Minds</Text>
+        <Text style={styles.shortName}>ADHD / DM</Text>
         <Text style={styles.subGreeting}>ADHD support &amp; guidance</Text>
       </View>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RTC Clinics')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RTC')}>
         <Text style={styles.cardTitle}>Find an NHS Right to Choose clinic</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Private Clinics')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Private')}>
         <Text style={styles.cardTitle}>Find a private ADHD clinic</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RTC Wizard')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Letter')}>
         <Text style={styles.cardTitle}>Build your GP letter</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Appointments')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Diary')}>
         <Text style={styles.cardTitle}>Your appointments</Text>
       </TouchableOpacity>
 
@@ -38,7 +39,9 @@ export default function HomeScreen({ navigation }: any) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg, padding: spacing.md },
   header: { alignItems: 'center', marginBottom: spacing.lg, marginTop: spacing.sm },
-  greeting: { color: colors.text, fontSize: 20, fontWeight: '700', marginTop: spacing.sm },
+  logoCard: { width: 104, height: 104, borderRadius: 24, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
+  appName: { color: colors.text, fontSize: 24, fontWeight: '800', marginTop: spacing.md },
+  shortName: { color: colors.primary, fontSize: 13, fontWeight: '800', letterSpacing: 1, marginTop: 2 },
   subGreeting: { color: colors.textMuted, fontSize: 13, marginTop: 2 },
   card: {
     backgroundColor: colors.surface,
