@@ -17,18 +17,20 @@ interface ClinicWithDistance extends Clinic {
   distance: number | null;
 }
 
+const RTC_CLINICS = CLINICS.filter((clinic) => clinic.rtcEligible || clinic.type === 'nhs_direct');
+
 export default function ClinicsScreen() {
   const [place, setPlace] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [results, setResults] = useState<ClinicWithDistance[]>(
-    CLINICS.map((c) => ({ ...c, distance: null }))
+    RTC_CLINICS.map((c) => ({ ...c, distance: null }))
   );
 
   const search = async () => {
     setError(null);
     if (!place.trim()) {
-      setResults(CLINICS.map((c) => ({ ...c, distance: null })));
+      setResults(RTC_CLINICS.map((c) => ({ ...c, distance: null })));
       return;
     }
     setLoading(true);
@@ -38,7 +40,7 @@ export default function ClinicsScreen() {
       setError("Couldn't find that — try a postcode or a town/city name.");
       return;
     }
-    const withDistance = CLINICS.map((c) => ({
+    const withDistance = RTC_CLINICS.map((c) => ({
       ...c,
       distance: distanceMiles(coords, { lat: c.lat, lng: c.lng }),
     })).sort((a, b) => (a.distance ?? 0) - (b.distance ?? 0));
@@ -81,8 +83,8 @@ export default function ClinicsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Find a provider</Text>
-      <Text style={styles.subtitle}>Enter a postcode, town, or city to sort by distance.</Text>
+      <Text style={styles.title}>NHS Right to Choose clinics</Text>
+      <Text style={styles.subtitle}>For eligible patients registered with a GP in England. Search by postcode, town, or city to compare NHS-funded routes by distance.</Text>
       <View style={styles.searchRow}>
         <TextInput
           style={styles.input}

@@ -12,8 +12,12 @@ export default function HomeScreen({ navigation }: any) {
         <Text style={styles.subGreeting}>ADHD support &amp; guidance</Text>
       </View>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Clinics')}>
-        <Text style={styles.cardTitle}>Find a provider</Text>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RTC Clinics')}>
+        <Text style={styles.cardTitle}>Find an NHS Right to Choose clinic</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Private Clinics')}>
+        <Text style={styles.cardTitle}>Find a private ADHD clinic</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RTC Wizard')}>

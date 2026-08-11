@@ -73,7 +73,7 @@ export default function App() {
           }}
         >
           <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Clinics" component={ClinicsScreen} />
+          <Tab.Screen name="RTC Clinics" component={ClinicsScreen} />
           <Tab.Screen name="Private Clinics" component={PrivateClinicsScreen} />
           <Tab.Screen name="RTC Wizard" component={RTCWizardScreen} />
           <Tab.Screen name="Appointments" component={AppointmentsScreen} />
