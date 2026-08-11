@@ -13,8 +13,11 @@ import RTCWizardScreen from './src/screens/RTCWizardScreen';
 import AppointmentsScreen from './src/screens/AppointmentsScreen';
 import PrivateClinicsScreen from './src/screens/PrivateClinicsScreen';
 import LoginScreen from './src/screens/LoginScreen';
-import { onAuthStateChanged, User } from 'firebase/auth';
+import SettingsScreen from './src/screens/SettingsScreen';
+import DeviceUnlockScreen from './src/screens/DeviceUnlockScreen';
+import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { auth } from './src/firebase';
+import { deviceLockEnabled } from './src/utils/deviceLock';
 import { colors } from './src/theme/theme';
 
 const Tab = createBottomTabNavigator();
@@ -36,6 +39,7 @@ export default function App() {
   const [authReady, setAuthReady] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [guest, setGuest] = useState(false);
+  const [deviceUnlocked, setDeviceUnlocked] = useState(false);
 
   useEffect(() => onAuthStateChanged(auth, currentUser => {
     setUser(currentUser);
@@ -59,6 +63,16 @@ export default function App() {
     return <SafeAreaProvider><StatusBar style="light" /><LoginScreen onContinueAsGuest={() => setGuest(true)} /></SafeAreaProvider>;
   }
 
+  const logout = async () => {
+    if (user) await signOut(auth);
+    setGuest(false);
+    setDeviceUnlocked(false);
+  };
+
+  if (user && deviceLockEnabled() && !deviceUnlocked) {
+    return <SafeAreaProvider><StatusBar style="light" /><DeviceUnlockScreen onUnlocked={() => setDeviceUnlocked(true)} onSignOut={logout} /></SafeAreaProvider>;
+  }
+
   return (
     <SafeAreaProvider>
       <NavigationContainer theme={navTheme}>
@@ -77,6 +91,9 @@ export default function App() {
           <Tab.Screen name="Private Clinics" component={PrivateClinicsScreen} />
           <Tab.Screen name="RTC Wizard" component={RTCWizardScreen} />
           <Tab.Screen name="Appointments" component={AppointmentsScreen} />
+          <Tab.Screen name="Settings">
+            {() => <SettingsScreen user={user} guest={guest} onLogout={logout} />}
+          </Tab.Screen>
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
