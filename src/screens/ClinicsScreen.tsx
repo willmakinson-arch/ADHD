@@ -51,6 +51,8 @@ export default function ClinicsScreen() {
   const card = (item: Clinic, distance?: number) => {
     const compareId = `rtc:${item.id}`;
     const selected = compared.includes(compareId);
+    const sourceNeedsCheck = !item.sourceCheckedOn || !/\d{1,2} [A-Z][a-z]{2} 20\d{2}/.test(item.sourceCheckedOn);
+
     return (
       <View style={styles.card} key={`${item.id}-${distance ?? 'online'}`}>
         <View style={styles.headingRow}>
@@ -59,17 +61,34 @@ export default function ClinicsScreen() {
         </View>
         {distance !== undefined && <Text style={styles.distance}>About {distance.toFixed(0)} miles away</Text>}
         <Text style={styles.detail}>{distance === undefined ? 'NHS-funded if an eligible referral is accepted' : 'Local NHS route'}</Text>
+
         <View style={styles.storedInfo}>
-          <Text style={styles.storedLabel}>CURRENT CHECK NEEDED</Text>
-          <Text style={styles.storedText}>Stored wait estimate: {item.typicalWaitMonths} months. Do not rely on this without checking the provider/service now.</Text>
+          <Text style={styles.storedLabel}>CURRENT WAIT / STATUS</Text>
+          <Text style={styles.storedText}>{item.typicalWaitMonths}</Text>
         </View>
+
         <Text style={styles.notes}>{item.notes}</Text>
+
+        <View style={[styles.sourceCard, sourceNeedsCheck && styles.sourceCardNeedsCheck]}>
+          <View style={styles.sourceHeading}>
+            <Text style={styles.sourceLabel}>{sourceNeedsCheck ? 'SOURCE NEEDS CHECKING' : 'PRIMARY SOURCE CHECKED'}</Text>
+            <Text style={styles.sourceDate}>{item.sourceCheckedOn ?? 'Not checked'}</Text>
+          </View>
+          <Text style={styles.sourceName}>{item.sourceLabel ?? `${item.name} provider information`}</Text>
+          {item.sourceDataNote && <Text style={styles.sourceNote}>{item.sourceDataNote}</Text>}
+          {item.sourceUrl && (
+            <TouchableOpacity onPress={() => Linking.openURL(item.sourceUrl!)}>
+              <Text style={styles.sourceLink}>Open source ↗</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
         {distance === undefined && (
           <TouchableOpacity style={[styles.compareButton, selected && styles.compareButtonActive]} onPress={() => toggleCompare(item)}>
             <Text style={[styles.compareButtonText, selected && styles.compareButtonTextActive]}>{selected ? '✓ Saved to Provider Intelligence' : '+ Add to compare'}</Text>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={() => Linking.openURL(item.website)}><Text style={styles.link}>Check current provider details →</Text></TouchableOpacity>
+        <TouchableOpacity onPress={() => Linking.openURL(item.website)}><Text style={styles.link}>Open provider pathway →</Text></TouchableOpacity>
       </View>
     );
   };
@@ -79,7 +98,7 @@ export default function ClinicsScreen() {
       <View style={styles.hero}>
         <Text style={styles.kicker}>ENGLAND · NHS PATIENT CHOICE</Text>
         <Text style={styles.title}>Right to Choose providers</Text>
-        <Text style={styles.subtitle}>Find routes, save providers you want to compare, and check the parts that matter beyond a headline waiting time.</Text>
+        <Text style={styles.subtitle}>Find routes, save providers you want to compare, and see the source and freshness of changing information before you act.</Text>
       </View>
 
       {compared.length > 0 && (
@@ -103,12 +122,12 @@ export default function ClinicsScreen() {
       {nearby.map(item => card(item, item.distance))}
 
       <Text style={styles.sectionTitle}>Nationwide online RTC providers</Text>
-      <Text style={styles.sectionHelp}>Distance is not used for these online providers. Check current age criteria, referral acceptance, waiting time and what happens after assessment.</Text>
+      <Text style={styles.sectionHelp}>Distance is not used for these online providers. Check current age criteria, referral acceptance, ICB requirements, waiting information and what happens after assessment.</Text>
       {RTC_CLINICS.map(item => card(item))}
 
       <View style={styles.footerCard}>
         <Text style={styles.footerTitle}>Different Minds verification rule</Text>
-        <Text style={styles.footerText}>Provider availability, waits and post-assessment arrangements can change. The app should make stale information obvious rather than presenting it as a guarantee.</Text>
+        <Text style={styles.footerText}>Provider availability, waits and post-assessment arrangements can change. Different Minds shows the source and review date and tells you when information still needs checking rather than presenting it as a guarantee.</Text>
       </View>
     </ScrollView>
   );
@@ -146,6 +165,14 @@ const styles = StyleSheet.create({
   storedLabel: { color: '#F7B267', fontSize: 8, fontWeight: '900', letterSpacing: 0.9 },
   storedText: { color: colors.textMuted, fontSize: 10, lineHeight: 15, marginTop: 3 },
   notes: { color: colors.textMuted, fontSize: 11, lineHeight: 17, marginTop: spacing.sm },
+  sourceCard: { backgroundColor: colors.bg, borderRadius: radius.md, padding: 10, marginTop: spacing.sm, borderWidth: 1, borderColor: colors.success },
+  sourceCardNeedsCheck: { borderColor: '#F7B267' },
+  sourceHeading: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: spacing.sm },
+  sourceLabel: { color: colors.accent, fontSize: 8, fontWeight: '900', letterSpacing: 0.8 },
+  sourceDate: { color: colors.textMuted, fontSize: 8, fontWeight: '800' },
+  sourceName: { color: colors.text, fontSize: 10, fontWeight: '900', marginTop: 5 },
+  sourceNote: { color: colors.textMuted, fontSize: 9, lineHeight: 14, marginTop: 4 },
+  sourceLink: { color: colors.primary, fontSize: 10, fontWeight: '900', marginTop: 6 },
   compareButton: { minHeight: 42, borderRadius: radius.md, borderWidth: 1, borderColor: colors.primary, alignItems: 'center', justifyContent: 'center', marginTop: spacing.sm, paddingHorizontal: 12 },
   compareButtonActive: { backgroundColor: colors.surfaceAlt, borderColor: colors.accent },
   compareButtonText: { color: colors.primary, fontSize: 11, fontWeight: '900' },
