@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from './src/screens/SplashScreen';
 import HomeScreen from './src/screens/HomeScreen';
 import ClinicsScreen from './src/screens/ClinicsScreen';
+import ProgressScreen from './src/screens/ProgressScreen';
 import RTCWizardScreen from './src/screens/RTCWizardScreen';
 import AppointmentsScreen from './src/screens/AppointmentsScreen';
 import { colors } from './src/theme/theme';
@@ -50,7 +51,7 @@ export default function App() {
             tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
             tabBarActiveTintColor: colors.accent,
             tabBarInactiveTintColor: colors.textMuted,
-            tabBarLabelStyle: { fontSize: 11, fontWeight: '700' },
+            tabBarLabelStyle: { fontSize: 10, fontWeight: '700' },
             tabBarHideOnKeyboard: true,
           }}
         >
@@ -65,6 +66,11 @@ export default function App() {
             options={{ title: 'Assessment Providers', tabBarLabel: 'Providers' }}
           />
           <Tab.Screen
+            name="Progress"
+            component={ProgressScreen}
+            options={{ title: 'Referral Progress', tabBarLabel: 'Progress' }}
+          />
+          <Tab.Screen
             name="RTC Wizard"
             component={RTCWizardScreen}
             options={{ title: 'Right to Choose', tabBarLabel: 'RTC' }}
@@ -72,7 +78,7 @@ export default function App() {
           <Tab.Screen
             name="Appointments"
             component={AppointmentsScreen}
-            options={{ title: 'Appointments', tabBarLabel: 'Appointments' }}
+            options={{ title: 'Appointments', tabBarLabel: 'Appts' }}
           />
         </Tab.Navigator>
       </NavigationContainer>
