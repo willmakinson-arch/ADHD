@@ -46,15 +46,34 @@ export default function App() {
           screenOptions={{
             headerStyle: { backgroundColor: colors.surface },
             headerTintColor: colors.text,
+            headerTitleStyle: { fontWeight: '700' },
             tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.border },
-            tabBarActiveTintColor: colors.primary,
+            tabBarActiveTintColor: colors.accent,
             tabBarInactiveTintColor: colors.textMuted,
+            tabBarLabelStyle: { fontSize: 11, fontWeight: '700' },
+            tabBarHideOnKeyboard: true,
           }}
         >
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="Clinics" component={ClinicsScreen} />
-          <Tab.Screen name="RTC Wizard" component={RTCWizardScreen} />
-          <Tab.Screen name="Appointments" component={AppointmentsScreen} />
+          <Tab.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{ title: 'My Journey', tabBarLabel: 'Journey' }}
+          />
+          <Tab.Screen
+            name="Clinics"
+            component={ClinicsScreen}
+            options={{ title: 'Assessment Providers', tabBarLabel: 'Providers' }}
+          />
+          <Tab.Screen
+            name="RTC Wizard"
+            component={RTCWizardScreen}
+            options={{ title: 'Right to Choose', tabBarLabel: 'RTC' }}
+          />
+          <Tab.Screen
+            name="Appointments"
+            component={AppointmentsScreen}
+            options={{ title: 'Appointments', tabBarLabel: 'Appointments' }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
