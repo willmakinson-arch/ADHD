@@ -10,15 +10,18 @@ import ProgressScreen from './ProgressScreen';
 import ProviderCompareScreen from './ProviderCompareScreen';
 import SettingsScreen from './SettingsScreen';
 import SupportFinderScreen from './SupportFinderScreen';
+import WhileYouWaitScreen from './WhileYouWaitScreen';
 
-type Page = 'menu' | 'journey' | 'progress' | 'prep' | 'providers' | 'support' | 'communication' | 'evidence' | 'appointments' | 'settings';
+type Page = 'menu' | 'journey' | 'waiting' | 'progress' | 'prep' | 'providers' | 'support' | 'communication' | 'evidence' | 'appointments' | 'settings';
+
+type WaitingTarget = 'communication' | 'providers' | 'prep' | 'support' | 'evidence' | 'progress' | 'appointments';
 
 export default function MoreScreen({ route, navigation, user, guest, onLogout }: any) {
   const [page, setPage] = useState<Page>('menu');
 
   useEffect(() => {
     const target = route?.params?.open as Page | undefined;
-    if (target && ['journey', 'progress', 'prep', 'providers', 'support', 'communication', 'evidence', 'appointments', 'settings'].includes(target)) setPage(target);
+    if (target && ['journey', 'waiting', 'progress', 'prep', 'providers', 'support', 'communication', 'evidence', 'appointments', 'settings'].includes(target)) setPage(target);
   }, [route?.params?.request, route?.params?.open]);
 
   const subPage = (title: string, child: React.ReactNode) => (
@@ -35,6 +38,7 @@ export default function MoreScreen({ route, navigation, user, guest, onLogout }:
   );
 
   if (page === 'journey') return subPage('Find My Route', <JourneyScreen navigation={navigation} />);
+  if (page === 'waiting') return subPage('While You Wait', <WhileYouWaitScreen onOpen={(target: WaitingTarget) => setPage(target)} />);
   if (page === 'progress') return subPage('My Progress', <ProgressScreen navigation={navigation} />);
   if (page === 'prep') return subPage('Assessment Prep', <AssessmentPrepScreen />);
   if (page === 'providers') return subPage('Provider Intelligence', <ProviderCompareScreen />);
@@ -49,11 +53,12 @@ export default function MoreScreen({ route, navigation, user, guest, onLogout }:
       <View style={styles.hero}>
         <Text style={styles.kicker}>DIFFERENT MINDS</Text>
         <Text style={styles.title}>Your ADHD journey, organised around what comes next.</Text>
-        <Text style={styles.subtitle}>Use the journey tools to find your route, compare providers intelligently, understand support options, draft difficult messages, organise the information you do not want to forget, track your referral and prepare for appointments.</Text>
+        <Text style={styles.subtitle}>Use the journey tools to find your route, get through long waits with less mental load, compare providers intelligently, understand support options, draft difficult messages, organise information, track your referral and prepare for appointments.</Text>
       </View>
 
       <Text style={styles.sectionTitle}>Journey tools</Text>
       <MenuCard symbol="→" title="Find My Route" text="Tell us where you live and where you are in the ADHD journey. Get one clear next step." highlight onPress={() => setPage('journey')} />
+      <MenuCard symbol="1" title="While You Wait" text="Choose what is taking up the most headspace and reduce it to one small useful action for today." onPress={() => setPage('waiting')} />
       <MenuCard symbol="⇄" title="Provider Intelligence" text="Save up to three RTC or private providers and compare the real questions that matter before choosing." onPress={() => setPage('providers')} />
       <MenuCard symbol="+" title="Support Finder" text="Find the correct UK route for Access to Work, workplace adjustments and disability-benefit guidance." onPress={() => setPage('support')} />
       <MenuCard symbol="✉" title="Communication Assistant" text="Draft GP follow-ups, workplace requests and provider questions, then review everything before opening your email app." onPress={() => setPage('communication')} />
@@ -67,7 +72,7 @@ export default function MoreScreen({ route, navigation, user, guest, onLogout }:
 
       <View style={styles.privacyCard}>
         <Text style={styles.privacyTitle}>Designed to reduce executive-function load</Text>
-        <Text style={styles.privacyText}>Journey stage, support route, progress, provider comparison, message drafts, notes and preparation information are kept locally on the device in this phase. Different Minds does not treat self-selected information as a clinical record, guarantee benefit eligibility or send communications without the user's explicit action.</Text>
+        <Text style={styles.privacyText}>Journey stage, support route, progress, provider comparison, message drafts, notes, waiting-task state and preparation information are kept locally on the device in this phase. Different Minds does not treat self-selected information as a clinical record, guarantee benefit eligibility or send communications without the user's explicit action.</Text>
       </View>
     </ScrollView>
   );
