@@ -31,7 +31,7 @@ export interface JourneyPlan {
   summary: string;
   points: string[];
   nextActionLabel: string;
-  nextActionTab?: 'Clinics' | 'RTC Wizard' | 'Appointments';
+  nextActionTab?: 'Clinics' | 'RTC Wizard' | 'Progress' | 'Appointments';
   nextActionUrl?: string;
   secondaryActionLabel?: string;
   secondaryActionUrl?: string;
@@ -164,8 +164,8 @@ export function getJourneyPlan(nation: HomeNation, stage: JourneyStage): Journey
           ? 'If this is your first eligible outpatient referral, ask your GP whether NHS patient choice is relevant to your circumstances.'
           : `Use the official ${source.label} route for local waiting-list and referral questions.`,
       ],
-      nextActionLabel: 'Track an appointment or milestone',
-      nextActionTab: 'Appointments',
+      nextActionLabel: 'Open my referral timeline',
+      nextActionTab: 'Progress',
       secondaryActionLabel: `Open official ${source.label} guidance`,
       secondaryActionUrl: source.sourceUrl,
       caution: 'Never cancel an existing referral until a replacement route is confirmed.',
