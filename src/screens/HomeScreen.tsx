@@ -11,7 +11,7 @@ export default function HomeScreen({ navigation }: any) {
   const openMore = (open: string) => navigation.navigate('More', { open, request: Date.now() });
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: spacing.xl * 3 }}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.hero}>
         <View style={styles.brandRow}>
           <View style={styles.logoCard}><Logo size={62} /></View>
@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }: any) {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.routeCard} onPress={() => openMore('journey')}>
+      <TouchableOpacity style={styles.routeCard} onPress={() => openMore('journey')} activeOpacity={0.9}>
         <View style={styles.routeTopRow}>
           <View style={styles.routeBadge}><Text style={styles.routeBadgeText}>START HERE</Text></View>
           <Text style={styles.routeArrow}>→</Text>
@@ -37,15 +37,19 @@ export default function HomeScreen({ navigation }: any) {
         <View style={styles.routeFooter}>
           <Text style={styles.routeFooterText}>NHS pathway · Right to Choose · Private · Waiting · Assessment · After diagnosis</Text>
         </View>
+        <View style={styles.routeAction}>
+          <Text style={styles.routeActionText}>Show me my next step</Text>
+          <Text style={styles.routeActionArrow}>→</Text>
+        </View>
       </TouchableOpacity>
 
       <View style={styles.quickRow}>
-        <TouchableOpacity style={styles.quickCard} onPress={() => openMore('progress')}>
+        <TouchableOpacity style={styles.quickCard} onPress={() => openMore('progress')} activeOpacity={0.9}>
           <Text style={styles.quickIcon}>✓</Text>
           <Text style={styles.quickTitle}>My Progress</Text>
           <Text style={styles.quickText}>See where you are and what comes next.</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.quickCard} onPress={() => openMore('prep')}>
+        <TouchableOpacity style={styles.quickCard} onPress={() => openMore('prep')} activeOpacity={0.9}>
           <Text style={styles.quickIcon}>◎</Text>
           <Text style={styles.quickTitle}>Assessment Prep</Text>
           <Text style={styles.quickText}>Practical preparation without symptom coaching.</Text>
@@ -53,25 +57,25 @@ export default function HomeScreen({ navigation }: any) {
       </View>
 
       <Text style={styles.sectionTitle}>Assessment routes & tools</Text>
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RTC')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('RTC')} activeOpacity={0.9}>
         <View style={styles.cardIcon}><Text style={styles.cardIconText}>R</Text></View>
         <View style={styles.cardCopy}><Text style={styles.cardTitle}>Right to Choose clinics</Text><Text style={styles.cardText}>Explore NHS-funded assessment routes for England</Text></View>
         <Text style={styles.arrow}>›</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Private')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Private')} activeOpacity={0.9}>
         <View style={[styles.cardIcon, styles.privateIcon]}><Text style={styles.cardIconText}>P</Text></View>
         <View style={styles.cardCopy}><Text style={styles.cardTitle}>Private ADHD clinics</Text><Text style={styles.cardText}>Compare nearby private assessment options</Text></View>
         <Text style={styles.arrow}>›</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Letter')}>
+      <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Letter')} activeOpacity={0.9}>
         <View style={[styles.cardIcon, styles.letterIcon]}><Text style={styles.cardIconText}>✎</Text></View>
         <View style={styles.cardCopy}><Text style={styles.cardTitle}>Build your GP letter</Text><Text style={styles.cardText}>Create a Right to Choose request to review with your GP</Text></View>
         <Text style={styles.arrow}>›</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.card} onPress={() => openMore('appointments')}>
+      <TouchableOpacity style={styles.card} onPress={() => openMore('appointments')} activeOpacity={0.9}>
         <View style={[styles.cardIcon, styles.diaryIcon]}><Text style={styles.cardIconText}>●</Text></View>
         <View style={styles.cardCopy}><Text style={styles.cardTitle}>Your appointments</Text><Text style={styles.cardText}>Keep dates and reminders together</Text></View>
         <Text style={styles.arrow}>›</Text>
@@ -83,7 +87,8 @@ export default function HomeScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.bg, padding: spacing.md },
+  container: { flex: 1, backgroundColor: colors.bg },
+  content: { width: '100%', maxWidth: 1120, alignSelf: 'center', padding: spacing.md, paddingBottom: spacing.xl * 3 },
   hero: { backgroundColor: colors.surface, borderRadius: 26, borderWidth: 1, borderColor: colors.border, padding: spacing.md, marginTop: spacing.xs, marginBottom: spacing.md },
   brandRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   logoCard: { width: 76, height: 76, borderRadius: 21, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
@@ -94,15 +99,18 @@ const styles = StyleSheet.create({
   statusRow: { flexDirection: 'row', alignItems: 'center', backgroundColor: colors.bg, borderRadius: radius.pill, paddingHorizontal: 12, paddingVertical: 9, marginTop: spacing.md, alignSelf: 'flex-start' },
   statusDot: { width: 7, height: 7, borderRadius: 4, marginRight: 8 },
   statusText: { color: colors.textMuted, fontSize: 11, fontWeight: '700' },
-  routeCard: { backgroundColor: colors.surfaceAlt, borderRadius: 24, padding: spacing.lg, marginBottom: spacing.md, borderWidth: 1, borderColor: colors.accent },
+  routeCard: { backgroundColor: colors.surfaceAlt, borderRadius: 24, padding: spacing.lg, marginBottom: spacing.md, borderWidth: 1.5, borderColor: colors.accent },
   routeTopRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   routeBadge: { backgroundColor: colors.accent, borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 5 },
   routeBadgeText: { color: '#0F1220', fontSize: 8, fontWeight: '900', letterSpacing: 1 },
   routeArrow: { color: colors.accent, fontSize: 26, fontWeight: '900' },
-  routeTitle: { color: colors.text, fontSize: 25, fontWeight: '900', marginTop: 10 },
-  routeText: { color: colors.textMuted, fontSize: 12, lineHeight: 18, marginTop: 6 },
+  routeTitle: { color: colors.text, fontSize: 27, fontWeight: '900', marginTop: 10 },
+  routeText: { color: colors.textMuted, fontSize: 13, lineHeight: 20, marginTop: 6, maxWidth: 760 },
   routeFooter: { backgroundColor: colors.bg, borderRadius: radius.md, padding: 10, marginTop: 13, borderLeftWidth: 3, borderLeftColor: colors.primary },
-  routeFooterText: { color: colors.textMuted, fontSize: 9, lineHeight: 14, fontWeight: '700' },
+  routeFooterText: { color: colors.textMuted, fontSize: 10, lineHeight: 15, fontWeight: '700' },
+  routeAction: { backgroundColor: colors.accent, borderRadius: radius.md, paddingHorizontal: 15, paddingVertical: 13, marginTop: spacing.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  routeActionText: { color: '#0F1220', fontSize: 13, fontWeight: '900' },
+  routeActionArrow: { color: '#0F1220', fontSize: 18, fontWeight: '900' },
   quickRow: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.lg },
   quickCard: { flex: 1, minHeight: 128, backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, padding: 13 },
   quickIcon: { color: colors.accent, fontSize: 20, fontWeight: '900' },
