@@ -49,24 +49,36 @@ export default function ProgressScreen({ navigation }: any) {
       navigation.navigate('More', { open: 'journey', request: Date.now() });
       return;
     }
+    if (current.id === 'referral_sent' || current.id === 'provider_confirmed') {
+      navigation.navigate('More', { open: 'communication', request: Date.now() });
+      return;
+    }
+    if (current.id === 'waiting') {
+      navigation.navigate('More', { open: 'waiting', request: Date.now() });
+      return;
+    }
     if (current.id === 'assessment_booked') {
       navigation.navigate('More', { open: 'prep', request: Date.now() });
       return;
     }
-    if (current.id === 'assessment_complete' || current.id === 'follow_up') {
+    if (current.id === 'assessment_complete') {
       navigation.navigate('More', { open: 'appointments', request: Date.now() });
       return;
     }
-    navigation.navigate('RTC');
+    navigation.navigate('More', { open: 'support', request: Date.now() });
   };
 
   const toolLabel = current.id === 'assessment_booked'
     ? 'Open assessment prep'
-    : current.id === 'assessment_complete' || current.id === 'follow_up'
+    : current.id === 'assessment_complete'
       ? 'Open appointments'
-      : current.id === 'preparing' || current.id === 'gp'
-        ? 'Open Find My Route'
-        : 'Open provider tools';
+      : current.id === 'follow_up'
+        ? 'Open Support Finder'
+        : current.id === 'waiting'
+          ? 'Open While You Wait'
+          : current.id === 'referral_sent' || current.id === 'provider_confirmed'
+            ? 'Draft a follow-up message'
+            : 'Open Find My Route';
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
@@ -89,7 +101,9 @@ export default function ProgressScreen({ navigation }: any) {
           <Text style={styles.nextLabel}>ONE CLEAR NEXT STEP</Text>
           <Text style={styles.nextText}>{current.next}</Text>
         </View>
-        <TouchableOpacity style={styles.primaryButton} onPress={openUsefulTool}><Text style={styles.primaryButtonText}>{toolLabel}</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.primaryButton} onPress={openUsefulTool}>
+          <Text style={styles.primaryButtonText}>{toolLabel}</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.timelineCard}>
@@ -130,7 +144,7 @@ export default function ProgressScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg },
-  content: { padding: spacing.md, paddingBottom: spacing.xl * 3 },
+  content: { padding: spacing.md, paddingBottom: spacing.xl * 4, width: '100%', maxWidth: 980, alignSelf: 'center' },
   heroCard: { backgroundColor: colors.surfaceAlt, borderRadius: radius.lg, padding: spacing.md, borderWidth: 1, borderColor: colors.primary, marginBottom: spacing.md },
   eyebrow: { color: colors.accent, fontSize: 10, fontWeight: '900', letterSpacing: 1.4, marginBottom: 5 },
   title: { color: colors.text, fontSize: 24, lineHeight: 29, fontWeight: '900' },
