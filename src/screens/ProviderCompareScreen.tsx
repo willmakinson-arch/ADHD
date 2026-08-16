@@ -8,6 +8,12 @@ import {
 } from '../data/providerIntelligence';
 import { colors, radius, spacing } from '../theme/theme';
 
+function sourceBadge(provider: ProviderIntelligence) {
+  if (provider.sourceStatus === 'source_checked') return { label: 'SOURCE CHECKED', tone: styles.sourceChecked };
+  if (provider.sourceStatus === 'local_route') return { label: 'LOCAL CHECK', tone: styles.sourceLocal };
+  return { label: 'CHECK NOW', tone: styles.sourceNeedsCheck };
+}
+
 export default function ProviderCompareScreen() {
   const [providers, setProviders] = useState<ProviderIntelligence[]>([]);
 
@@ -27,10 +33,15 @@ export default function ProviderCompareScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.hero}>
         <Text style={styles.kicker}>PROVIDER INTELLIGENCE</Text>
-        <Text style={styles.title}>Compare the pathway, not just the headline price.</Text>
+        <Text style={styles.title}>Compare the pathway — and see how fresh the information is.</Text>
         <Text style={styles.subtitle}>
-          Save up to three providers from the RTC or Private tabs. Different Minds then puts the important questions side by side so you can see what still needs checking before you commit.
+          Save up to three providers from RTC or Private. Different Minds shows the important trade-offs, the primary source behind the record and whether that source was recently checked or still needs verification.
         </Text>
+      </View>
+
+      <View style={styles.trustRule}>
+        <Text style={styles.trustRuleTitle}>THE DIFFERENT MINDS TRUST RULE</Text>
+        <Text style={styles.trustRuleText}>A price, wait or eligibility note is never treated as permanent. Source date and verification status stay visible so you know what to re-check before acting.</Text>
       </View>
 
       {providers.length === 0 ? (
@@ -45,50 +56,65 @@ export default function ProviderCompareScreen() {
             <TouchableOpacity onPress={clear}><Text style={styles.clearText}>Clear comparison</Text></TouchableOpacity>
           </View>
 
-          {providers.map(provider => (
-            <View key={provider.id} style={styles.providerCard}>
-              <View style={styles.headingRow}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.providerName}>{provider.name}</Text>
-                  <Text style={styles.routeLabel}>{provider.routeLabel}</Text>
-                </View>
-                <View style={styles.verifyBadge}><Text style={styles.verifyBadgeText}>VERIFY</Text></View>
-              </View>
-
-              <ComparisonRow label="Coverage" value={provider.coverage} />
-              <ComparisonRow label="Cost" value={provider.priceLabel} />
-              <ComparisonRow label="Waiting" value={provider.waitLabel} />
-              <ComparisonRow label="Format" value={provider.appointmentType} />
-              <ComparisonRow label="Age" value={provider.ages} />
-
-              <View style={styles.insightBox}>
-                <Text style={styles.insightLabel}>WHAT THIS TELLS YOU</Text>
-                {provider.strengths.map((item, index) => <Text key={index} style={styles.bullet}>• {item}</Text>)}
-              </View>
-
-              <View style={styles.checkBox}>
-                <Text style={styles.checkLabel}>BEFORE YOU CHOOSE</Text>
-                {provider.verifyBeforeChoosing.map((item, index) => (
-                  <View key={index} style={styles.checkRow}>
-                    <Text style={styles.checkNumber}>{index + 1}</Text>
-                    <Text style={styles.checkText}>{item}</Text>
+          {providers.map(provider => {
+            const badge = sourceBadge(provider);
+            return (
+              <View key={provider.id} style={styles.providerCard}>
+                <View style={styles.headingRow}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.providerName}>{provider.name}</Text>
+                    <Text style={styles.routeLabel}>{provider.routeLabel}</Text>
                   </View>
-                ))}
-              </View>
+                  <View style={[styles.sourceBadge, badge.tone]}><Text style={styles.sourceBadgeText}>{badge.label}</Text></View>
+                </View>
 
-              <Text style={styles.verification}>{provider.verificationLabel}</Text>
-              <TouchableOpacity style={styles.providerButton} onPress={() => Linking.openURL(provider.website)}>
-                <Text style={styles.providerButtonText}>Check current provider information ↗</Text>
-              </TouchableOpacity>
-            </View>
-          ))}
+                <ComparisonRow label="Coverage" value={provider.coverage} />
+                <ComparisonRow label="Cost" value={provider.priceLabel} />
+                <ComparisonRow label="Waiting" value={provider.waitLabel} />
+                <ComparisonRow label="Format" value={provider.appointmentType} />
+                <ComparisonRow label="Age" value={provider.ages} />
+
+                <View style={styles.sourceCard}>
+                  <View style={styles.sourceTopRow}>
+                    <Text style={styles.sourceKicker}>SOURCE & FRESHNESS</Text>
+                    <Text style={styles.sourceDate}>{provider.sourceCheckedOn}</Text>
+                  </View>
+                  <Text style={styles.sourceName}>{provider.sourceLabel}</Text>
+                  <Text style={styles.sourceNotice}>{provider.sourceNotice}</Text>
+                  <TouchableOpacity onPress={() => Linking.openURL(provider.sourceUrl)}>
+                    <Text style={styles.sourceLink}>Open primary source ↗</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={styles.insightBox}>
+                  <Text style={styles.insightLabel}>WHAT THIS TELLS YOU</Text>
+                  {provider.strengths.map((item, index) => <Text key={index} style={styles.bullet}>• {item}</Text>)}
+                </View>
+
+                <View style={styles.checkBox}>
+                  <Text style={styles.checkLabel}>BEFORE YOU CHOOSE</Text>
+                  {provider.verifyBeforeChoosing.map((item, index) => (
+                    <View key={index} style={styles.checkRow}>
+                      <Text style={styles.checkNumber}>{index + 1}</Text>
+                      <Text style={styles.checkText}>{item}</Text>
+                    </View>
+                  ))}
+                </View>
+
+                <Text style={styles.verification}>{provider.verificationLabel}</Text>
+                <TouchableOpacity style={styles.providerButton} onPress={() => Linking.openURL(provider.website)}>
+                  <Text style={styles.providerButtonText}>Open provider pathway ↗</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
         </>
       )}
 
       <View style={styles.safetyCard}>
         <Text style={styles.safetyTitle}>Why Different Minds does not rank providers 1–10</Text>
         <Text style={styles.safetyText}>
-          The right route depends on eligibility, clinical needs, location, age, cost and follow-up arrangements. A made-up “best provider” score could hide important trade-offs. Different Minds instead shows what is known, what is uncertain and what you should verify.
+          The right route depends on eligibility, clinical needs, location, age, cost and follow-up arrangements. A made-up “best provider” score could hide important trade-offs. Different Minds instead shows what is known, what is uncertain, where it came from and what you should verify.
         </Text>
       </View>
     </ScrollView>
@@ -107,10 +133,13 @@ function ComparisonRow({ label, value }: { label: string; value: string }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.bg },
   content: { padding: spacing.md, paddingBottom: spacing.xl * 3, width: '100%', maxWidth: 980, alignSelf: 'center' },
-  hero: { backgroundColor: colors.surfaceAlt, borderRadius: 24, padding: spacing.lg, borderWidth: 1, borderColor: colors.accent, marginBottom: spacing.md },
+  hero: { backgroundColor: colors.surfaceAlt, borderRadius: 24, padding: spacing.lg, borderWidth: 1, borderColor: colors.accent, marginBottom: spacing.sm },
   kicker: { color: colors.accent, fontSize: 10, fontWeight: '900', letterSpacing: 1.2 },
   title: { color: colors.text, fontSize: 24, lineHeight: 30, fontWeight: '900', marginTop: 6 },
   subtitle: { color: colors.textMuted, fontSize: 12, lineHeight: 18, marginTop: 7 },
+  trustRule: { backgroundColor: colors.surface, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, padding: 12, marginBottom: spacing.md },
+  trustRuleTitle: { color: colors.accent, fontSize: 9, fontWeight: '900', letterSpacing: 1 },
+  trustRuleText: { color: colors.textMuted, fontSize: 10, lineHeight: 15, marginTop: 4 },
   emptyCard: { backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, padding: spacing.lg },
   emptyTitle: { color: colors.text, fontSize: 18, fontWeight: '900' },
   emptyText: { color: colors.textMuted, fontSize: 12, lineHeight: 18, marginTop: 6 },
@@ -121,11 +150,21 @@ const styles = StyleSheet.create({
   headingRow: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.sm, marginBottom: spacing.sm },
   providerName: { color: colors.text, fontSize: 19, fontWeight: '900' },
   routeLabel: { color: colors.accent, fontSize: 10, fontWeight: '800', marginTop: 3 },
-  verifyBadge: { backgroundColor: '#F7B267', borderRadius: radius.pill, paddingHorizontal: 9, paddingVertical: 4 },
-  verifyBadgeText: { color: '#0F1220', fontSize: 8, fontWeight: '900', letterSpacing: 0.8 },
+  sourceBadge: { borderRadius: radius.pill, paddingHorizontal: 9, paddingVertical: 4 },
+  sourceChecked: { backgroundColor: colors.success },
+  sourceLocal: { backgroundColor: colors.primary },
+  sourceNeedsCheck: { backgroundColor: '#F7B267' },
+  sourceBadgeText: { color: '#0F1220', fontSize: 7, fontWeight: '900', letterSpacing: 0.7 },
   compareRow: { flexDirection: 'row', gap: spacing.md, borderTopWidth: 1, borderTopColor: colors.border, paddingVertical: 9 },
   compareLabel: { width: 74, color: colors.textMuted, fontSize: 10, fontWeight: '900', textTransform: 'uppercase' },
   compareValue: { flex: 1, color: colors.text, fontSize: 11, lineHeight: 16, fontWeight: '700' },
+  sourceCard: { backgroundColor: colors.bg, borderRadius: radius.md, padding: 12, marginTop: spacing.sm, borderWidth: 1, borderColor: colors.border },
+  sourceTopRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing.sm },
+  sourceKicker: { color: colors.accent, fontSize: 8, fontWeight: '900', letterSpacing: 0.9 },
+  sourceDate: { color: colors.textMuted, fontSize: 8, fontWeight: '800' },
+  sourceName: { color: colors.text, fontSize: 11, fontWeight: '900', marginTop: 6 },
+  sourceNotice: { color: colors.textMuted, fontSize: 9, lineHeight: 14, marginTop: 4 },
+  sourceLink: { color: colors.primary, fontSize: 10, fontWeight: '900', marginTop: 8 },
   insightBox: { backgroundColor: colors.surfaceAlt, borderRadius: radius.md, padding: 12, marginTop: spacing.sm, borderLeftWidth: 3, borderLeftColor: colors.accent },
   insightLabel: { color: colors.accent, fontSize: 8, fontWeight: '900', letterSpacing: 1 },
   bullet: { color: colors.text, fontSize: 10, lineHeight: 16, marginTop: 5 },
