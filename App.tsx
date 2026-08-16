@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -38,12 +38,15 @@ const navTheme = {
 
 function AppContent() {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const [showSplash, setShowSplash] = useState(true);
   const [authReady, setAuthReady] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [guest, setGuest] = useState(false);
   const [deviceUnlocked, setDeviceUnlocked] = useState(false);
   const { status: locationStatus, requestLocation } = useLocation();
+
+  const navInset = width > 1180 ? Math.max((width - 1120) / 2, 10) : 10;
 
   useEffect(() => onAuthStateChanged(auth, currentUser => {
     setUser(currentUser);
@@ -88,14 +91,13 @@ function AppContent() {
         <StatusBar style="light" />
         <Tab.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: colors.surface },
-            headerTintColor: colors.text,
+            headerShown: false,
             tabBarStyle: {
               backgroundColor: colors.surface,
               borderTopColor: colors.border,
               position: 'absolute',
-              left: 10,
-              right: 10,
+              left: navInset,
+              right: navInset,
               bottom: Math.max(insets.bottom, 8),
               height: 66,
               borderRadius: 22,

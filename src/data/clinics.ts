@@ -1,7 +1,7 @@
 // Seed dataset of UK ADHD assessment providers.
-// No paid API — this is a maintained local dataset. Update these entries
-// periodically by hand (or later crowd-source updates) as provider
-// availability/waiting times change.
+// No paid API — this is a maintained local dataset. Provider availability,
+// waiting information and pathway rules can change quickly, so the app must
+// point users back to current primary sources before they act.
 //
 // lat/lng are approximate head-office / regional-hub coordinates used
 // only for "distance from you" sorting, not exact clinic addresses.
@@ -12,14 +12,18 @@ export interface Clinic {
   id: string;
   name: string;
   type: ClinicType;
-  regionsCovered: string; // human-readable coverage description
+  regionsCovered: string;
   lat: number;
   lng: number;
-  typicalWaitMonths: string; // free text, e.g. "8-14"
-  priceFrom: string | null; // null for free NHS routes
+  typicalWaitMonths: string;
+  priceFrom: string | null;
   notes: string;
   website: string;
   rtcEligible: boolean;
+  sourceLabel?: string;
+  sourceUrl?: string;
+  sourceCheckedOn?: string;
+  sourceDataNote?: string;
 }
 
 export const CLINICS: Clinic[] = [
@@ -29,13 +33,17 @@ export const CLINICS: Clinic[] = [
     type: 'private',
     regionsCovered: 'England (RTC) + UK-wide private (online)',
     lat: 53.5511,
-    lng: -0.6553, // Lincoln, UK
-    typicalWaitMonths: '6-12',
-    priceFrom: '£495',
+    lng: -0.6553,
+    typicalWaitMonths: 'Varies by ICB — use the provider’s current regional wait table',
+    priceFrom: 'Check current private pricing',
     notes:
-      'Offers both Right to Choose (NHS-funded, needs GP referral) and fully private routes. Has its own screening tool.',
-    website: 'https://www.adhd-360.com',
+      'Offers an NHS-funded Right to Choose route in England as well as private care. Current RTC waiting times and requirements differ by ICB, so check the provider’s live regional information before referral.',
+    website: 'https://www.adhd-360.com/right-to-choose/',
     rtcEligible: true,
+    sourceLabel: 'ADHD360 official RTC wait-times and ICB requirements',
+    sourceUrl: 'https://www.adhd-360.com/right-to-choose/wait-times-and-icb-allowances/',
+    sourceCheckedOn: '16 Aug 2026',
+    sourceDataNote: 'Official source checked by Different Minds. The provider publishes ICB-specific estimates and requirements that can change.',
   },
   {
     id: 'psychiatry-uk',
@@ -43,13 +51,17 @@ export const CLINICS: Clinic[] = [
     type: 'private',
     regionsCovered: 'England (RTC) + UK-wide private (online)',
     lat: 53.4084,
-    lng: -2.9916, // Liverpool, UK
-    typicalWaitMonths: '12-18',
-    priceFrom: '£600',
+    lng: -2.9916,
+    typicalWaitMonths: 'Varies — check the provider’s current RTC service updates',
+    priceFrom: 'Check current private pricing',
     notes:
-      'Large RTC provider; demand-driven waits vary a lot by ICB. Also runs an autism assessment service.',
-    website: 'https://psychiatry-uk.com',
+      'Provides an online Right to Choose pathway for eligible referrals in England and a separate private adult ADHD service. RTC service changes can be affected by local NHS commissioning arrangements.',
+    website: 'https://psychiatry-uk.com/right-to-choose/',
     rtcEligible: true,
+    sourceLabel: 'Psychiatry-UK official Right to Choose service updates',
+    sourceUrl: 'https://psychiatry-uk.com/right-to-choose-service-updates/',
+    sourceCheckedOn: '16 Aug 2026',
+    sourceDataNote: 'Official source checked by Different Minds. Re-open it before referral because service updates and waiting arrangements can change.',
   },
   {
     id: 'clinical-partners',
@@ -57,13 +69,17 @@ export const CLINICS: Clinic[] = [
     type: 'private',
     regionsCovered: 'England (RTC) + UK-wide private (online)',
     lat: 51.4545,
-    lng: -2.5879, // Bristol, UK
-    typicalWaitMonths: 'varies — some ICBs paused',
-    priceFrom: '£600',
+    lng: -2.5879,
+    typicalWaitMonths: 'Varies by ICB — check current RTC wait and booking updates',
+    priceFrom: 'Check current private pricing',
     notes:
-      'Some ICBs (e.g. Birmingham & Solihull) have paused new RTC bookings with this provider — check current status before applying.',
-    website: 'https://www.clinical-partners.co.uk',
+      'Provides NHS Right to Choose ADHD assessment services in England alongside private care. Referral acceptance, booking availability and medication/titration arrangements can differ by ICB.',
+    website: 'https://www.clinical-partners.co.uk/nhs-right-to-choose-assessments-and-medication/',
     rtcEligible: true,
+    sourceLabel: 'Clinical Partners official RTC wait-times and updates',
+    sourceUrl: 'https://www.clinical-partners.co.uk/nhs-right-to-choose-assessments-and-medication/nhs-right-to-choose-wait-times-and-updates/',
+    sourceCheckedOn: '16 Aug 2026',
+    sourceDataNote: 'Official source checked by Different Minds. The provider publishes ICB-specific updates, so the current area entry should be checked before referral.',
   },
   {
     id: 'innovate-adhd',
@@ -71,26 +87,34 @@ export const CLINICS: Clinic[] = [
     type: 'private',
     regionsCovered: 'England (RTC) + UK-wide private (online)',
     lat: 52.4862,
-    lng: -1.8904, // Birmingham, UK
-    typicalWaitMonths: '6-12',
-    priceFrom: '£495',
+    lng: -1.8904,
+    typicalWaitMonths: 'Current RTC wait not verified in this review',
+    priceFrom: 'Check current private pricing',
     notes:
-      'Accepts transfers from existing NHS waiting lists via RTC redirection — you do not need to start over.',
+      'ADHD assessment provider with private services and information about NHS-funded routes. Different Minds has not independently re-verified its current RTC acceptance and waiting position in this review.',
     website: 'https://innovateadhd.com',
     rtcEligible: true,
+    sourceLabel: 'Innovate ADHD provider website',
+    sourceUrl: 'https://innovateadhd.com',
+    sourceCheckedOn: 'RTC status needs re-checking',
+    sourceDataNote: 'Do not rely on stored RTC acceptance or waiting information. Confirm the current NHS-funded pathway directly with the provider and GP before changing an existing referral.',
   },
   {
     id: 'nhs-standard',
     name: 'Your local NHS Neurodevelopmental / Adult ADHD Service',
     type: 'nhs_direct',
-    regionsCovered: 'Local to your ICB — via GP referral',
+    regionsCovered: 'Local NHS pathway — via GP / local referral process',
     lat: 52.4862,
     lng: -1.8904,
-    typicalWaitMonths: '12-96+ (varies hugely by area)',
+    typicalWaitMonths: 'Varies by local NHS service — ask for current local information',
     priceFrom: null,
     notes:
-      'Fully NHS-funded standard route. Ask your GP for current local waiting times — these vary enormously by ICB.',
+      'Standard NHS-funded local route. Waiting times, referral criteria and service names vary by area. Ask the GP or receiving service for the current local pathway.',
     website: 'https://www.nhs.uk/conditions/attention-deficit-hyperactivity-disorder-adhd/',
     rtcEligible: false,
+    sourceLabel: 'NHS England patient choice guidance',
+    sourceUrl: 'https://www.england.nhs.uk/long-read/patient-choice-guidance/',
+    sourceCheckedOn: '16 Aug 2026',
+    sourceDataNote: 'NHS England guidance explains patient choice in England but does not provide a single national ADHD waiting time. Local service information still needs checking.',
   },
 ];
